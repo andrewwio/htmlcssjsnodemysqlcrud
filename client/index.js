@@ -5,6 +5,69 @@ document.addEventListener('DOMContentLoaded', () => {
   
 });
 
+document.querySelector('table tbody').addEventListener('click', (event) => {
+  if (event.target.className === "delete-row-btn") {
+    deleteRowById(event.target.dataset.id);
+  }
+  if (event.target.lassName === "delete-row-btn") {
+    deleteRowById(event.target.dataset.id);
+  }
+  if (event.target.className === "edit-row-btn") {
+    editRowById(event.target.dataset.id);
+  }
+});
+
+const updateBtn = document.querySelector('#update-row-btn');
+const searchBtn = document.querySelector('#search-btn');
+
+searchBtn.onclick = () => {
+  const searchValue = document.querySelector('#search-input').value;
+
+  fetch('http://localhost:5000/search/' + searchValue)
+  .then(response => response.json())
+  .then(data => loadHTMLTable(data['data']));
+}
+
+function deleteRowById(id) {
+  fetch('http://localhost:5000/delete/' + id, {
+    method: 'DELETE'
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      location.reload(); // Ideally create different function that grabs all the data and then fetch all and call loadHtml
+    }
+  });
+}
+
+function editRowById(id) {
+  const updateSection = document.querySelector('#update-row');
+  updateSection.hidden = false;
+  document.querySelector('#update-name-input').dataset.id = id;
+}
+
+updateBtn.onclick = () => { // Doesn't update time (lack of updated time row)
+  const updateNameInput = document.querySelector('#update-name-input');
+  console.log(updateNameInput);
+  fetch('http://localhost:5000/update', {
+      method: 'PATCH',
+      headers: {
+          'Content-type' : 'application/json'
+      },
+      body: JSON.stringify({
+          id: updateNameInput.dataset.id,
+          name: updateNameInput.value
+      })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          location.reload(); // ideally we would hide the old element 
+      }
+  })
+}
+
+
 const addBtn = document.querySelector('#add-name-btn');
 addBtn.onclick = () => {
   const nameInput = document.querySelector('#name-input');
