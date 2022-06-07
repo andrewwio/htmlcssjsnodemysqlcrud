@@ -14,12 +14,12 @@ app.use(express.urlencoded({ extended : false }));
 const databaseService = require('./databaseService');
 
 // Create
-app.post('/insert', (req, res) => {
+app.post('/insert', (request, response) => {
  console.log(request.body);
 });
 
 // Read
-app.get('/getAll', (req, res) => {
+app.get('/getAll', (request, response) => {
   const db = databaseService.getDatabaseServiceInstance();
   const result = db.getAllData();
   result
