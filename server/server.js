@@ -15,7 +15,12 @@ const databaseService = require('./databaseService');
 
 // Create
 app.post('/insert', (request, response) => {
- console.log(request.body);
+ const { name } = request.body;
+ const db = databaseService.getDatabaseServiceInstance();
+ const result = db.insertNewName(name);
+ result
+ .then(data => response.json({ data: data }))
+ .catch(err => console.log(err));
 });
 
 // Read
@@ -23,7 +28,7 @@ app.get('/getAll', (request, response) => {
   const db = databaseService.getDatabaseServiceInstance();
   const result = db.getAllData();
   result
-  .then(data => res.json({data : data}))
+  .then(data => response.json({data : data}))
   .catch(err => console.log(err));
 });
 
