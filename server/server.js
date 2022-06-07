@@ -15,14 +15,16 @@ const databaseService = require('./databaseService');
 
 // Create
 app.post('/insert', (req, res) => {
-
+ console.log(request.body);
 });
 
 // Read
 app.get('/getAll', (req, res) => {
-  res.json({ 
-    success: true
-  });
+  const db = databaseService.getDatabaseServiceInstance();
+  const result = db.getAllData();
+  result
+  .then(data => res.json({data : data}))
+  .catch(err => console.log(err));
 });
 
 // Update
